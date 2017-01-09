@@ -4,8 +4,6 @@ services:
         build:
             context: ./
             dockerfile: deploy/web.docker
-        volumes:
-            - ./:/var/www
         ports:
             - "8080:80"
         links:
