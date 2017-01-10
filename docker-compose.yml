@@ -17,11 +17,14 @@ services:
         links:
             - database
             - cache
+            - mongo
         environment:
             - "DB_PORT=3306"
             - "DB_HOST=database"
             - "REDIS_PORT=6379"
             - "REDIS_HOST=cache"
+            - "MONGO_PORT=27017"
+            - "MONGO_HOST=mongo"
     database:
         image: mysql:5.6
         environment:
@@ -33,3 +36,7 @@ services:
         image: redis:3.0
         ports:
             - "63791:6379"
+    mongo:
+        image: mongo:3.0
+        ports:
+            - "27017:27017"
