@@ -117,4 +117,17 @@ return [
 
     ],
 
+    'mongo' => [
+
+        'cluster' => false,
+
+        'default' => [
+            'host' => env('MONGO_HOST', 'localhost'),
+            'password' => env('MONGO_PASSWORD', null),
+            'port' => env('MONGO_PORT', 6379),
+            'database' => local, // >show dbs
+        ],
+
+    ],
+
 ];

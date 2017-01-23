@@ -1,23 +1,17 @@
 version: '2'
 services:
-    web:
-        build:
-            context: ./
-            dockerfile: deploy/web.docker
-        ports:
-            - "8080:80"
-        links:
-            - app
     app:
         build:
             context: ./
-            dockerfile: deploy/app.docker
+            dockerfile: deploy/ubuntu_php.docker
         volumes:
             - ./:/var/www
         links:
             - database
             - cache
             - mongo
+        ports:
+            - "8080:80"
         environment:
             - "DB_PORT=3306"
             - "DB_HOST=database"

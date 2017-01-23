@@ -1,0 +1,38 @@
+FROM ubuntu:16.10
+
+# More apt-get list
+RUN rm -fR /var/lib/apt/lists/*
+
+# Add mongo source
+RUN echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+
+# Install package
+RUN apt-get update && apt-get install -y software-properties-common iputils-ping net-tools libmcrypt-dev mysql-client libcurl4-openssl-dev pkg-config libssl-dev dirmngr git vim curl wget zip unzip vim apache2 
+
+# Install php package
+RUN apt-get install -y php7.0 libapache2-mod-php7.0 php7.0-fpm php7.0-mysql php7.0-mcrypt php7.0-gd php7.0-cli php7.0-curl php7.0-imap php7.0-mbstring php-pear php7.0-dev 
+
+# Add mongo apt-key
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+
+# Add mongo tool
+RUN apt-get update && apt-get install -y --allow-unauthenticated mongodb-org-tools=3.0.13 mongodb-org-shell=3.0.13
+
+# Add php mongo driver
+RUN pecl install mongodb && echo 'extension=mongodb.so' | tee /etc/php/7.0/cli/conf.d/20-mongo.ini
+
+# Add composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# EXPOSE 8080 8443
+
+# Copy apache config
+COPY ./deploy/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY ./deploy/apache2.conf /etc/apache2/apache2.conf
+COPY ./deploy/dir.conf /etc/apache2/mods-enabled/dir.conf
+
+WORKDIR /var/www
+
+CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+
+
